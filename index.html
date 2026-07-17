@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Shift End Time Calculator</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f4f6f8;
+      padding: 20px;
+    }
+
+    .calculator {
+      width: 100%;
+      max-width: 420px;
+      background: #ffffff;
+      padding: 28px;
+      border-radius: 18px;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 26px;
+      font-size: 24px;
+      text-align: center;
+      color: #111827;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 16px;
+      background: #ffffff;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .result {
+      margin-top: 25px;
+      padding: 24px;
+      background: #111827;
+      color: #ffffff;
+      border-radius: 14px;
+      text-align: center;
+    }
+
+    .result-label {
+      margin-bottom: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      opacity: 0.7;
+    }
+
+    #endTime {
+      font-size: 34px;
+      font-weight: 700;
+    }
+
+    .summary {
+      margin-top: 10px;
+      font-size: 13px;
+      opacity: 0.65;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="calculator">
+
+    <h1>Shift Calculator</h1>
+
+    <!-- Shift Start -->
+
+    <div class="field">
+      <label for="shiftStart">Shift Start</label>
+
+      <input
+        type="time"
+        id="shiftStart"
+        value="14:00"
+      >
+    </div>
+
+
+    <!-- Break -->
+
+    <div class="field">
+
+      <label for="breakTime">
+        Break (Minutes)
+      </label>
+
+      <input
+        type="number"
+        id="breakTime"
+        value="30"
+        min="0"
+        placeholder="Enter break minutes"
+      >
+
+    </div>
+
+
+    <!-- Total Working Hours -->
+
+    <div class="field">
+
+      <label>Total Working Hours</label>
+
+      <div class="row">
+
+        <div>
+          <label for="workHours">Hours</label>
+
+          <input
+            type="number"
+            id="workHours"
+            value="8"
+            min="0"
+          >
+        </div>
+
+        <div>
+          <label for="workMinutes">Minutes</label>
+
+          <input
+            type="number"
+            id="workMinutes"
+            value="30"
+            min="0"
+            max="59"
+          >
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- Result -->
+
+    <div class="result">
+
+      <div class="result-label">
+        SHIFT END TIME
+      </div>
+
+      <div id="endTime">
+        --:--
+      </div>
+
+      <div
+        class="summary"
+        id="summary"
+      ></div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    // Get elements
+
+    const shiftStart =
+      document.getElementById("shiftStart");
+
+    const breakTime =
+      document.getElementById("breakTime");
+
+    const workHours =
+      document.getElementById("workHours");
+
+    const workMinutes =
+      document.getElementById("workMinutes");
+
+    const endTime =
+      document.getElementById("endTime");
+
+    const summary =
+      document.getElementById("summary");
+
+
+    // Calculate shift end time
+
+    function calculateEndTime() {
+
+      // Check shift start
+
+      if (!shiftStart.value) {
+
+        endTime.textContent = "--:--";
+        summary.textContent = "";
+
+        return;
+
+      }
+
+
+      // Get start time
+
+      const [startHour, startMinute] =
+        shiftStart.value
+          .split(":")
+          .map(Number);
+
+
+      // Get entered values
+
+      const breakMinutes =
+        Number(breakTime.value) || 0;
+
+      const totalHours =
+        Number(workHours.value) || 0;
+
+      const totalWorkMinutes =
+        Number(workMinutes.value) || 0;
+
+
+      // Convert everything to minutes
+
+      const startTotalMinutes =
+        (startHour * 60) + startMinute;
+
+      const workingMinutes =
+        (totalHours * 60) +
+        totalWorkMinutes;
+
+
+      // Calculate final time
+
+      let finalMinutes =
+        startTotalMinutes +
+        workingMinutes +
+        breakMinutes;
+
+
+      // Handle next day
+
+      finalMinutes =
+        finalMinutes % (24 * 60);
+
+
+      // Convert back to hours and minutes
+
+      const finalHour24 =
+        Math.floor(finalMinutes / 60);
+
+      const finalMinute =
+        finalMinutes % 60;
+
+
+      // Convert to 12-hour format
+
+      const period =
+        finalHour24 >= 12 ? "PM" : "AM";
+
+      const finalHour12 =
+        finalHour24 % 12 || 12;
+
+
+      // Display result
+
+      endTime.textContent =
+        `${finalHour12}:${finalMinute
+          .toString()
+          .padStart(2, "0")} ${period}`;
+
+
+      // Display calculation summary
+
+      summary.textContent =
+        `${totalHours}h ${totalWorkMinutes}m work + ${breakMinutes}m break`;
+
+    }
+
+
+    // Automatically calculate when values change
+
+    const inputs =
+      document.querySelectorAll("input");
+
+    inputs.forEach(input => {
+
+      input.addEventListener(
+        "input",
+        calculateEndTime
+      );
+
+      input.addEventListener(
+        "change",
+        calculateEndTime
+      );
+
+    });
+
+
+    // Calculate on page load
+
+    calculateEndTime();
+
+  </script>
+
+</body>
+</html>
