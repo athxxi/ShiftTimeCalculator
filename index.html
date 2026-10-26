@@ -18,24 +18,25 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #161921;
+      background: #0F1115;
       padding: 20px;
     }
 
     .calculator {
       width: 100%;
       max-width: 420px;
-      background: #2B303C;
+      background: #1A1D24;
       padding: 28px;
+      border: 1px solid #262A33;
       border-radius: 18px;
-      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
     }
 
     h1 {
       margin: 0 0 26px;
       font-size: 24px;
       text-align: center;
-      color: #f0f0f0;
+      color: #E6E8EC;
     }
 
     .field {
@@ -47,22 +48,25 @@
       margin-bottom: 7px;
       font-size: 14px;
       font-weight: 600;
-      color: #f0f0f0;
+      color: #A9AFBC;
     }
 
     input {
       width: 100%;
       padding: 13px;
-      border: 1px solid #aaaaaa;
+      border: 1px solid #2E333D;
       border-radius: 10px;
       font-size: 16px;
-      background: #414550;
+      background: #13161C;
+      color: #E6E8EC;
+      color-scheme: dark;
       outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     input:focus {
-      border-color: #BFEAA6;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      border-color: #9BD48A;
+      box-shadow: 0 0 0 3px rgba(155, 212, 138, 0.15);
     }
 
     .row {
@@ -74,8 +78,9 @@
     .result {
       margin-top: 25px;
       padding: 24px;
-      background: #161921;
-      color: #f0f0f0;
+      background: #13161C;
+      border: 1px solid #262A33;
+      color: #E6E8EC;
       border-radius: 14px;
       text-align: center;
     }
@@ -85,20 +90,22 @@
       font-size: 12px;
       font-weight: 600;
       letter-spacing: 1px;
-      opacity: 0.7;
+      opacity: 0.6;
     }
 
     #endTime {
       font-size: 34px;
       font-weight: 700;
+      color: #BFEAA6;
     }
 
     .summary {
       margin-top: 10px;
       font-size: 13px;
-      opacity: 0.65;
+      opacity: 0.55;
     }
   </style>
+  
 </head>
 
 <body>
